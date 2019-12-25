@@ -1,16 +1,18 @@
 import React from "react";
 import { render } from "react-dom";
+import ReactDOM from "react-dom";
 
 import FullCalendar from "sardius-fullcalendar-wrapper";
 import interactionPlugin from "@fullcalendar/interaction";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import "@fullcalendar/core/main.css";
 import "@fullcalendar/daygrid/main.css";
+import Modal from "./Modal";
 
 const today = new Date();
 const tomorrow = new Date();
 
-class ExampleComponent extends React.Component {
+class Calendar1 extends React.Component {
   constructor(props) {
     super(props);
     // Create a reference to the component to use Full Calendar methods
@@ -18,7 +20,7 @@ class ExampleComponent extends React.Component {
     this.state = {
       events: [
         {
-          title: "Example Event",
+          title: "omar",
           start: today
         },
         {
@@ -30,17 +32,7 @@ class ExampleComponent extends React.Component {
   }
 
   eventClicked = eventClickInfo => {
-    <>
-      <html>
-        <head>veuillez vous s'il te plait ajouter un nouveller evenement</head>
-        <body>
-          <form>
-            <li>nome</li>
-            <textarea> </textarea>
-          </form>
-        </body>
-      </html>
-    </>;
+    alert("Event has been clicked!");
   };
 
   getView = () => {
@@ -50,21 +42,9 @@ class ExampleComponent extends React.Component {
   };
 
   selectEvent = selectionInfo => {
-    alert(
-      <>
-        <html>
-          <head>
-            veuillez vous s'il te plait ajouter un nouveller evenement
-          </head>
-          <body>
-            <form>
-              <li>nome</li>
-              <textarea> .......</textarea>
-            </form>
-          </body>
-        </html>
-      </>
-    );
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+    ReactDOM.render(<Modal />, container);
   };
 
   render() {
@@ -97,4 +77,4 @@ class ExampleComponent extends React.Component {
   }
 }
 
-render(<ExampleComponent />, document.getElementById("root"));
+render(<Calendar1 />, document.getElementById("root"));
