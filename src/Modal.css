@@ -10,8 +10,8 @@
 
 .modal-header {
   background: #263238;
-  height: 40px;
-  line-height: 40px;
+  height: 10px;
+  line-height: 10px;
   padding: 5px 20px;
   text-align: right;
   overflow: visible;
@@ -27,7 +27,7 @@
 }
 
 .modal-body {
-  padding: 100px 150px;
+  padding: 100px 200px;
   text-align: center;
   overflow: visible;
   z-index: 99999 !important;
@@ -103,5 +103,15 @@
   top: 50%;
   transform: translate(-50%, -50%);
   overflow: visible;
+  z-index: 99999 !important;
+}
+.box {
+  background: #fff;
+  border: 1px solid #999;
+  border-radius: 3px;
+  width: 180px;
+  height: 180px;
+  position: absolute;
+  float: left;
   z-index: 99999 !important;
 }

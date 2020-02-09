@@ -1,6 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
-import ReactDOM from "react-dom";
+//import ReactDOM from "react-dom";
+import "./Modal.css";
 
 import FullCalendar from "sardius-fullcalendar-wrapper";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -8,6 +9,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import "@fullcalendar/core/main.css";
 import "@fullcalendar/daygrid/main.css";
 import Modal from "./Modal";
+import Draggable from "react-draggable";
 
 const today = new Date();
 const tomorrow = new Date();
@@ -20,6 +22,15 @@ class Calendar1 extends React.Component {
     this.state = {
       isShowing: false,
       eventLimit: true,
+      activeDrags: 0,
+      deltaPosition: {
+        x: 0,
+        y: 0
+      },
+      controlledPosition: {
+        x: 0,
+        y: 0
+      },
       events: [
         {
           title: "omar",
@@ -60,8 +71,56 @@ class Calendar1 extends React.Component {
       isShowing: false
     });
   };
+  // Drag
+  handleDrag = (e, ui) => {
+    const { x, y } = this.state.deltaPosition;
+    this.setState({
+      deltaPosition: {
+        x: x + ui.deltaX,
+        y: y + ui.deltaY
+      }
+    });
+  };
+
+  onStart = () => {
+    this.setState({ activeDrags: ++this.state.activeDrags });
+  };
+
+  onStop = () => {
+    this.setState({ activeDrags: --this.state.activeDrags });
+  };
+
+  // For controlled component
+  adjustXPos = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { x, y } = this.state.controlledPosition;
+    this.setState({ controlledPosition: { x: x - 10, y } });
+  };
+
+  adjustYPos = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { controlledPosition } = this.state;
+    const { x, y } = controlledPosition;
+    this.setState({ controlledPosition: { x, y: y - 10 } });
+  };
+
+  onControlledDrag = (e, position) => {
+    const { x, y } = position;
+    this.setState({ controlledPosition: { x, y } });
+  };
+
+  onControlledDragStop = (e, position) => {
+    this.onControlledDrag(e, position);
+    this.onStop();
+  };
+  // End drag
 
   render() {
+    const dragHandlers = { onStart: this.onStart, onStop: this.onStop };
+    const { deltaPosition, controlledPosition } = this.state;
+
     return (
       <>
         <FullCalendar
@@ -70,7 +129,8 @@ class Calendar1 extends React.Component {
           header={{
             left: "prev,today,next",
             center: "title",
-            right: "dayGridMonth, dayGridWeek, dayGridDay"
+            right: "dayGridMonth, dayGridWeek, dayGridDay",
+            center: "addEventButton"
           }}
           navLinks
           events={this.state.events}
@@ -89,23 +149,24 @@ class Calendar1 extends React.Component {
           allDaySlot={false}
           defaultView="dayGridMonth"
         />
-        <div>
-          {this.state.isShowing ? (
-            <div onClick={this.closeModalHandler} className="back-drop"></div>
-          ) : null}
 
-          <button className="open-modal-btn" onClick={this.eventClicked}>
-            Open Modal
-          </button>
+        <Draggable
+          position={controlledPosition}
+          {...dragHandlers}
+          onStop={this.onControlledDragStop}
+        >
+          <p className="center">
+            <a href="#" onClick={this.adjustXPos}></a>
 
-          <Modal
-            className="modal"
-            show={this.state.isShowing}
-            close={this.closeModalHandler}
-          >
-            Modal Realised for medecin
-          </Modal>
-        </div>
+            <Modal
+              className="center"
+              show={this.state.isShowing}
+              close={this.closeModalHandler}
+            >
+              Modal Realised for medecin
+            </Modal>
+          </p>
+        </Draggable>
       </>
     );
   }
