@@ -1,20 +1,50 @@
-import React, { Component } from "react";
+import React from "react";
 
-export default class Modal extends Component {
-  state = { show: false };
+import "./Modal.css";
 
-  showModal = () => {
-    this.setState({ show: true });
-  };
+const modal = props => {
+  return (
+    <div className="center">
+      <div
+        className="modal-wrapper"
+        style={{
+          transform: props.show ? "translateY(0vh)" : "translateY(-100vh)",
+          opacity: props.show ? "1" : "0"
+        }}
+      >
+        <div className="modal-header">
+          <h3>Modal Header</h3>
+          <span className="close-modal-btn" onClick={props.close}>
+            ×
+          </span>
+        </div>
+        <div className="modal-body">
+          <p>{props.children}</p>
+        </div>
 
-  hideModal = () => {
-    this.setState({ show: false });
-  };
+        <div>
+          <form>
+            Name : <br />
+            <input type="text" name="firstname" value="Mickey" />
+            <br />
+            Last name:
+            <br />
+            <input type="text" name="lastname" value="Mouse" />
+            <br />
+            <br />
+            <input type="submit" value="Submit" />
+          </form>
+        </div>
 
-  render() {
-    return <div class="container">omar abdedaim</div>;
-  }
-}
+        <div className="modal-footer">
+          <button className="btn-cancel" onClick={props.close}>
+            CLOSE
+          </button>
+          <button className="btn-continue">CONTINUE</button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-const container = document.createElement("div");
-document.body.appendChild(container);
+export default modal;
